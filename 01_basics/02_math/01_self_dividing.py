@@ -26,10 +26,6 @@ class Solution:
         return self.solution_01(num)
         # return self.solution_02(num)
 
-    def digits(self, num):
-        while num:
-            yield num % 10
-            num //= 10
 
     def solution_01(self, num):
         digits = num
@@ -50,6 +46,10 @@ class Solution:
 
             return all( num % digit == 0 for digit in self.digits(num) )
     
+    def digits(self, num):
+        while num:
+            yield num % 10
+            num //= 10
 
 
 # Test
