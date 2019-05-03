@@ -1,7 +1,8 @@
 '''
-Approach :
-Runtime: O()
-Space Complexity: O()
+Approach 1:
+    Convert to bin, flip bits, back to decimal
+Runtime: O(b), for all b bits in the binary representation of num
+Space Complexity: O(b)
 '''
 from typing import List
 class Solution:
