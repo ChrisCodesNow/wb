@@ -8,12 +8,18 @@ Approach 2:
     Convert to bin with LSB front, count aligned bit complements, count remaining 1's on larger if any
 Runtime: O(b), for b bits
 Space Complexity: O(b)
+
+Approach 3:
+    Use xor to keep distinct bits
+Runtime: O(b)
+Space Comlexity: O(b)
 '''
 from typing import List
 class Solution:
     def hammingDistance(self, x: int, y: int) -> int:
         # return self.solution_01(x, y)
-        return self.solution_02(x, y)
+        # return self.solution_02(x, y)
+        return self.solution_03(x, y)
 
 
     def solution_01(self, x, y):
@@ -33,6 +39,11 @@ class Solution:
         count += self.count_remaining_ones(bin_x, bin_y)
 
         return count
+
+    
+    def solution_03(self, x, y):
+        diff_bits = bin(x ^ y)[2:]
+        return self.count_ones_from(diff_bits, 0)
 
 
     # Fill's smaller binary string with leading zeroes, matching string size
