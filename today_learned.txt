@@ -1,0 +1,21 @@
+Tue 04/30/2019
+Python:
+Iterators: 
+    Methods like map, reversed, enumerate, etc, return an iterator
+    Iterators cannot be reversed, must convert into list before reversing iterator
+
+Wed 05/01/2019
+
+Python:
+Iterators:
+    A method, such as map, can take an iterable, without having to convert it to a list first.
+
+Python has map, filter, and reduce methods
+
+Thu 05/02/2019
+Python:
+    Test driven development
+    Created Test class to validate results.
+
+Programming:
+    Have improved modularization
