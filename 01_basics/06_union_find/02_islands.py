@@ -1,7 +1,11 @@
 '''
-Approach :
-Runtime: O()
-Space Complexity: O()
+Approach 1:
+    Modified bfs, count distinct lands
+
+Runtime: O(mn)
+Space Complexity: O(mn)
+
+Note: Verify runtinme and space complexity
 '''
 from typing import List
 from union_find import UnionFind
@@ -16,7 +20,7 @@ class Solution:
     # Build disjoint set of connected components
     def modified_bfs(self, grid):
         visited = set()
-        Q = deque()
+        Q = deque(self.get_land_coordinates(grid))
         
         # BFS modification
         m, n = self.grid_dimmensions(grid)
@@ -34,7 +38,6 @@ class Solution:
                         self.connect_land(u, v, ds, grid)
 
                     visited.add(v)
-                    Q.append(v)
 
         return ds
 
@@ -76,6 +79,17 @@ class Solution:
             yield (i, j - 1)
         if j + 1 < n:
             yield (i, j + 1)
+
+
+    # Get all land coordinates on grid
+    def get_land_coordinates(self, grid):
+        land_coordinates = []
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j]:
+                    land_coordinates.append((i, j))
+
+        return land_coordinates
 
 
     # Check if adjacent elements are land
@@ -147,11 +161,6 @@ if __name__ == '__main__':
     t.run(s.numIslands(grid) == 1)
     print()
     
-    
-    grid = [[1,1,1,1,0],
-            [1,1,0,1,0],
-            [1,1,0,0,0],
-            [0,0,0,0,0]]
 
     grid = [[1,1,0,0,0],
             [1,1,0,0,0],
