@@ -12,10 +12,23 @@ from collections import Counter
 from typing import List
 class Solution:
     def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:
+        # return self.solution_01(paragraph, banned)
+        return self.solution_02(paragraph, banned)
+
+
+    def solution_01(self, paragraph, banned):
         paragraph_words = self.separate_words(paragraph)
         paragraph_words = self.remove_punctuation(paragraph_words)
         words_frequency = Counter(paragraph_words)
         return self.top_unbanned_word(words_frequency, set(banned))
+
+
+    def solution_02(self, paragraph, banned):
+        paragraph_words = self.separate_words(paragraph)
+        paragraph_words = self.remove_punctuation(paragraph_words)
+        clean_words = self.get_clean_words(paragraph_words, set(banned))
+        words_frequency = Counter(clean_words)
+        return Counter(words_frequency).most_common(1)[0][0]
 
 
     def separate_words(self, paragraph):
@@ -23,6 +36,11 @@ class Solution:
         return paragraph.split()
         
         
+    def get_clean_words(self, words, banned):
+        clean_words = list(filter(lambda word: word not in banned, words))
+
+        return clean_words
+
     def remove_punctuation(self, words_list):
         return list(map(self.simple_word, words_list))
 
@@ -68,3 +86,8 @@ if __name__ == '__main__':
     paragraph = "a, a, a, a, b,b,b,c, c"
     banned = ["a"]
     t.run(s.mostCommonWord(paragraph, banned) == "b")
+
+
+    paragraph = "Bob. hIt, baLl"
+    banned = ["bob", "hit"]
+    t.run(s.mostCommonWord(paragraph, banned) == "ball")
