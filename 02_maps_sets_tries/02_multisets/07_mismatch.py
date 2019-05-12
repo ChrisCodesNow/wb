@@ -4,17 +4,36 @@ Approach 1:
 
 Runtime: O(nlogn)
 Space Complexity: O(n)
+
+Approach 2:
+    Similar to approach 1, but don't sort
+Runtime: O(nlogn)
+Space Complexity: O(n)
 '''
 from collections import Counter
 from typing import List
 class Solution:
     def findErrorNums(self, nums: List[int]) -> List[int]:
-        return self.solution_01(nums)
+        # return self.solution_01(nums)
+        return self.solution_02(nums)
 
 
     def solution_01(self, nums):
         duplicate, num_count = self.get_duplicate(nums)
         missing = self.get_missing(nums, num_count)
+        return [duplicate, missing]
+
+
+    def solution_02(self, nums):
+        num_count = Counter(nums)
+
+        for num in range(1, len(nums) + 1):
+            if num_count[num] == 2:
+                duplicate = num
+
+            if num not in num_count:
+                missing = num
+
         return [duplicate, missing]
 
 
