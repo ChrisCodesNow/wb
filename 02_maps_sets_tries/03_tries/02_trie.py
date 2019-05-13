@@ -55,7 +55,7 @@ class Trie:
         Returns if there is any word in the trie that starts with the given prefix.
         """
         itr = self.root
-        for char in word:
+        for char in prefix:
             i = self.idx(char)
             if not itr.children[i]:
                 return False
@@ -87,5 +87,13 @@ class Test:
 
         
 if __name__ == '__main__':
-    s = Solution()
     t = Test()
+
+    trie = Trie()
+
+    trie.insert("apple")
+    t.run(trie.search("apple") == True)
+    t.run(trie.search("app") == False)
+    t.run(trie.startsWith("app") == True)
+    trie.insert("app")
+    t.run(trie.search("app") == True)
