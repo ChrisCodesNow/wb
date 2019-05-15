@@ -123,20 +123,25 @@ class Solution:
     # Use trie for quick word search.
     def modified_bfs(self, board, word, trie, src):
         Q = deque()
+        Q.append((src, word[0]))        # Bug 1 solved: Make sure to add initial character
         visited = set()
-        Q.append((src, ""))
         visited.add(src)
 
         while Q:
             u, current_word = Q.popleft()
+            if word == current_word and trie.search(current_word):       # Bug 2 solved: Check current word, and only add neighbors.
+            # Bug 3 solved: Check the actual word is found, and not current build word
+                return True
+
             for v in self.get_neighbors(u, board):
                 if v not in visited:
                     i_v, j_v = v
                     adjacent_word = current_word + board[i_v][j_v]
-                    if trie.search(adjacent_word):
-                        return True
+
                     if trie.starts_with(adjacent_word):
                         Q.append((v, adjacent_word))
+
+                    visited.add(v)
 
         return False
 
@@ -177,9 +182,23 @@ if __name__ == '__main__':
         ['i','f','l','v']
     ]
     words = ["oath","pea","eat","rain"]
-    print(s.findWords(board, words))
     t.run(sorted(s.findWords(board, words)) == sorted(["eat","oath"]))
 
     words = ["oath","pea","eat","rain", "hi"]
-    print(s.findWords(board, words))
     t.run(sorted(s.findWords(board, words)) == sorted(["eat","oath", "hi"]))
+
+
+    board = [["a"]]
+    words = ["a"]
+    t.run(sorted(s.findWords(board, words)) == sorted(["a"]))   # My answer = []
+
+
+    board = [["a","b"],["c","d"]]
+    words = ["ab","cb","ad","bd","ac","ca","da","bc","db","adcb","dabc","abb","acb"]
+    t.run(sorted(s.findWords(board, words)) == sorted(["ab","ac","bd","ca","db"]))
+
+    board = [["a","b"],["a","a"]]
+    words = ["aba","baa","bab","aaab","aaa","aaaa","aaba"]
+    t.run(sorted(s.findWords(board, words)) == sorted(["aaa","aaab","aaba","aba","baa"]))
+    print(sorted(s.findWords(board, words)))
+    # got: ["aba","baa","aaab","aaa","aaaa","aaba"]
