@@ -123,25 +123,30 @@ class Solution:
     # Use trie for quick word search.
     def modified_bfs(self, board, word, trie, src):
         Q = deque()
-        Q.append((src, word[0]))        # Bug 1 solved: Make sure to add initial character
-        visited = set()
-        visited.add(src)
+        Q.append((src, word[0], set([src])))        # Bug 1 solved: Make sure to add initial character
 
         while Q:
-            u, current_word = Q.popleft()
+            if word == "aaab" and src == (0, 0):
+                print(Q)
+            u, current_word, visited = Q.popleft()
+            if word == "aaab" and src == (0, 0):
+                print(f'id visited = {id(visited)}')
             if word == current_word and trie.search(current_word):       # Bug 2 solved: Check current word, and only add neighbors.
             # Bug 3 solved: Check the actual word is found, and not current build word
                 return True
 
+            # Bug 4: I have a single set for the entire bfs, but it should 
+            # be distinct sets of visited, one per path being built.
+            # FIx at home!
             for v in self.get_neighbors(u, board):
                 if v not in visited:
                     i_v, j_v = v
                     adjacent_word = current_word + board[i_v][j_v]
+                    visited.add(v)
 
                     if trie.starts_with(adjacent_word):
-                        Q.append((v, adjacent_word))
+                        Q.append((v, adjacent_word, visited))
 
-                    visited.add(v)
 
         return False
 

@@ -7,11 +7,15 @@ Space Complexity: O(n)
 from collections import defaultdict
 from typing import List
 class Solution:
+
+    # 
+    # To do: Restructure variable names
+    # 
     def subdomainVisits(self, cpdomains: List[str]) -> List[str]:
         visit_count = self.get_visit_count(cpdomains)
-        count_subdomains = self.visit_domain(visit_count)
-        self.implicit_visit_parent_domains(visit_count, count_subdomains)
-        count_domain_pairs = self.format_pair_domains(count_subdomains)
+        all_count_domains = self.visit_domain(visit_count)
+        self.implicit_visit_parent_domains(visit_count, all_count_domains)
+        count_domain_pairs = self.format_pair_domains(all_count_domains)
 
         return count_domain_pairs
 
@@ -43,21 +47,21 @@ class Solution:
     # Array [count, domain]
     # Update Dict domain: count
     # Runtime: O(nw), for n words of size O(w)
-    def implicit_visit_parent_domains(self, visit_count, count_subdomains):
+    def implicit_visit_parent_domains(self, visit_count, all_count_domains):
         for count, domain in visit_count:
             domain_parts = domain.split(".")[1:]
             for i in range(len(domain_parts)):
                 implied_domain = ".".join(domain_parts[i:])
 
-                count_subdomains[implied_domain] += count
+                all_count_domains[implied_domain] += count
 
         
     # Dict domain: count -> Dict str(count domain)
     # Runtime: O(n)
     # Space: O(n)
-    def format_pair_domains(self, count_subdomains):
+    def format_pair_domains(self, all_count_domains):
         count_domain = []
-        for domain, count in count_subdomains.items():
+        for domain, count in all_count_domains.items():
             count = str(count)
             count_domain.append(count + ' ' + domain)
 

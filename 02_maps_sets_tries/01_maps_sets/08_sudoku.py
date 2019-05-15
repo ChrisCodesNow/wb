@@ -9,10 +9,6 @@ from typing import List
 class Solution:
     # 2D List str -> Bool
     def isValidSudoku(self, board: List[List[str]]) -> bool:
-        print(self.valid_rows(board))
-        print(self.valid_cols(board))
-        print(self.valid_boxes(board))
-
         return self.valid_rows(board) and \
                 self.valid_cols(board) and \
                 self.valid_boxes(board)
@@ -20,11 +16,12 @@ class Solution:
 
     # 2D List str -> Bool
     def valid_rows(self, board):
-        for row in board:
-            if not self.valid_row(row):
-                return False
+        return all(self.valid_row(row) for row in board)
+        # for row in board:
+        #     if not self.valid_row(row):
+        #         return False
 
-        return True
+        # return True
 
 
     # List str -> Bool
@@ -35,11 +32,13 @@ class Solution:
     # 2D List str -> Bool
     def valid_cols(self, board):
         cols = self.get_cols(board)
-        for col in cols:
-            if not self.valid_col(col):
-                return False
+        return all(self.valid_col(col) for col in cols)
+        # cols = self.get_cols(board)
+        # for col in cols:
+        #     if not self.valid_col(col):
+        #         return False
         
-        return True
+        # return True
 
 
     # 2D List str -> Yielded 2D List Str

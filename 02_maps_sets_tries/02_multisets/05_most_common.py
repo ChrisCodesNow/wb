@@ -11,6 +11,10 @@ Space Complexity: O(n + w)
 from collections import Counter
 from typing import List
 class Solution:
+
+    #
+    # Simplify naming of variables
+    #
     def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:
         # return self.solution_01(paragraph, banned)
         return self.solution_02(paragraph, banned)
