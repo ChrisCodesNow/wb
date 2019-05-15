@@ -8,7 +8,10 @@ Space Complexity: O(1)
 from typing import List
 class Solution:
     def findMinArrowShots(self, points: List[List[int]]) -> int:
-        balloons = sorted(baloons, key=lambda coord: coord[0])
+        if not points:
+            return 0
+            
+        balloons = sorted(points, key=lambda coord: coord[0])
         num_arrows = 0
         current_interval = balloons[0][:]
 
