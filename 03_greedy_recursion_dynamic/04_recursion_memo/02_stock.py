@@ -1,8 +1,8 @@
 '''
 Approach 1:
     At each day either:
-    * Haven't bought: Buy at day i or buy later, picking largest profit
-    * Already bought: Sell at day i or sell later, picking largest profit (largest sell available)
+    1. Haven't bought: Buy at day i or buy later, picking largest profit
+    2. Already bought: Sell at day i or sell later, picking largest profit (largest sell available)
 Runtime: O(n^2)
 Space Complexity: O(TBD)
 
