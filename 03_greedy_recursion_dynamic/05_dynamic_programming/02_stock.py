@@ -20,12 +20,17 @@ Approach 1:
 Runtime: O(n)
 Space Complexity: O(n)
 
+Approach 2:
+    Same as approach 1, bottom up approach but only save solution to 
+    previous subproblem i + 1 that will help compute current subproblem i
+Runtime: O(n)
+Space Complexity: O(1)
 '''
 from typing import List
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        return self.solution_01(prices)
-        # return self.solution_02(prices)
+        # return self.solution_01(prices)
+        return self.solution_02(prices)
 
 
     # ########################################
@@ -33,6 +38,9 @@ class Solution:
     #
     def solution_01(self, prices):
         n = len(prices)
+        if n < 2:
+            return 0
+
         best_profit = [0 for _ in range(n)]
         best_sell = prices[:]
 
@@ -42,6 +50,25 @@ class Solution:
             best_sell[i] = max(best_sell[i], best_sell[i + 1])
 
         return best_profit[0]
+
+
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, prices):
+        n = len(prices)
+        if n < 2:
+            return 0
+
+        best_profit = 0
+        best_sell = prices[-1]
+
+        for i in range(n - 2, -1, -1):
+            best_profit = max(-prices[i] + best_sell, 
+                            best_profit)
+            best_sell = max(prices[i], best_sell)
+
+        return best_profit
 
 
 # Test
