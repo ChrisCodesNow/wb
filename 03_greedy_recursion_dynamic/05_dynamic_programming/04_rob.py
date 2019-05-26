@@ -9,11 +9,19 @@ Approach 1:
 
 Runtime: O(n)
 Space Complexity: O(n)
+
+Approach 2:
+    Dynamic Programming, similar to approach 1, but only save results of 
+    subproblems i + 1 and i + 2.
+
+Runtime: O(n)
+Space Complexity: O(1)
 '''
 from typing import List
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        return self.solution_01(nums)
+        # return self.solution_01(nums)
+        return self.solution_02(nums)
 
 
     # ########################################
@@ -38,6 +46,33 @@ class Solution:
 
         return max(rob_first[0], skip_first[1])
 
+
+
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, houses):
+        n = len(houses)
+        if n < 2:
+            return 0
+
+        rob_first = [0] * 3
+        skip_first = houses[-3:]
+
+        rob_first[-2] = max(houses[-2], rob_first[-1])
+        skip_first[-2] = max(houses[-2], skip_first[-1])
+
+        for i in range(n - 3, -1, -1):
+            rob_first[0] = max(houses[i] + rob_first[2], rob_first[1])
+            rob_first[-1] = rob_first[-2]
+            rob_first[-2] = rob_first[-3]
+
+            if i > 0:
+                skip_first[0] = max(houses[i] + skip_first[2], skip_first[1])
+                skip_first[-1] = skip_first[-2]
+                skip_first[-2] = skip_first[-3]
+
+        return max(rob_first[0], skip_first[0])
 
 # Test
 class Test:
