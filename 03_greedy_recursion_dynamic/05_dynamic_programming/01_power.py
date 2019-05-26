@@ -5,7 +5,7 @@ Runtime: O(n)
 Space Complexity: O(n)
 
 Approach 2: Dynamic Programming
-    Solve subproblems bottom, only storing solution to subproblems 
+    Solve subproblems bottom up, only storing solution to subproblems 
     that will help compute next even and next odd powers.
 
 Runtime: O(n)
