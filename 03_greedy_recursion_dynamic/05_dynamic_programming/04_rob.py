@@ -21,8 +21,10 @@ class Solution:
     #
     def solution_01(self, houses):
         n = len(houses)
-        if n < 2:
+        if not houses:
             return 0
+        elif n == 1:
+            return houses[0]
 
         rob_first = [0] * n
         skip_first = houses[:]
@@ -34,7 +36,7 @@ class Solution:
             rob_first[i] = max(houses[i] + rob_first[i + 2], rob_first[i + 1])
             skip_first[i] = max(houses[i] + skip_first[i + 2], skip_first[i + 1])
 
-        return max(rob_first[0], skip_first[i + 1])
+        return max(rob_first[0], skip_first[1])
 
 
 # Test
@@ -70,3 +72,6 @@ if __name__ == '__main__':
     t.run(s.rob(nums) == 2926)
     end = time.time()
     print(f'Elapsed time = {(end-start)}')
+
+    nums = [1]
+    t.run(s.rob(nums) == 1)
