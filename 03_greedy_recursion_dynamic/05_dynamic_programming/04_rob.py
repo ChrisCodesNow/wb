@@ -53,8 +53,10 @@ class Solution:
     #
     def solution_02(self, houses):
         n = len(houses)
-        if n < 2:
+        if not houses:
             return 0
+        elif n == 1:
+            return houses[0]
 
         rob_first = [0] * 3
         skip_first = houses[-3:]
