@@ -14,7 +14,8 @@ Space Complexity: O(1)
 
 class Solution:
     def reverseList(self, head: ListNode) -> ListNode:
-        return self.solution_01(head)
+        # return self.solution_01(head)
+        return self.solution_02(None, head)
 
             
     # Iterative approach
@@ -33,6 +34,16 @@ class Solution:
 
         return prev
 
+
+    # Recursive approach
+    def solution_02(self, prev, curr):
+        if not curr:
+            return prev
+        
+        next = curr.next
+        curr.next = prev
+
+        return solution_02(curr, next)
 
 # Test
 class Test:
