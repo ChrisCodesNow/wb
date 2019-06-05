@@ -1,7 +1,10 @@
 '''
-Approach :
-Runtime: O()
-Space Complexity: O()
+Approach 1:
+    Get frequency count.
+    Save frequency in min heap.
+    Get top k
+Runtime: O(nlogn)
+Space Complexity: O(n)
 '''
 from collections import Counter
 import heapq
