@@ -1,7 +1,7 @@
 '''
 Approach 1:
     Base: 
-        Susets of empty list => empty set
+        Subsets of empty list => empty set
     Recursive:
         Get prev subsets A 0 to n-2
         Add curr char A n-1 at end of each prev subset

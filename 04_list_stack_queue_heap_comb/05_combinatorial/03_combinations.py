@@ -1,5 +1,13 @@
 '''
-Approach :
+Approach 1:
+    Base: 
+        Empty set => Empty Set.
+        k = 1 => Get each element
+    Recursive:
+        Pick and remove current list element.
+        Get combinations of remaining list elements, chooking k-1.
+        Combine chose element with each of previous combinations
+
 Runtime: O()
 Space Complexity: O()
 '''
