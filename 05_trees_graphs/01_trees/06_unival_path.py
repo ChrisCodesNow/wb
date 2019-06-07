@@ -8,6 +8,11 @@ Approach 1:
         Calculate current unival path
         Update best unival path
 
+Approach 2:
+    Same as approach 1, but use dummy pass up current height and ele value.
+    Base:
+        Empty => No path, height = -1, use dummy node val
+
 Runtime: O(n)
 Space Complexity: O(n)
 '''
@@ -21,6 +26,7 @@ Space Complexity: O(n)
 class Solution:
     def longestUnivaluePath(self, root: TreeNode) -> int:
         return self.solution_01(root)
+        return self.solution_02(root)
 
 
     # ########################################
@@ -92,6 +98,43 @@ class Solution:
             return root.right.val == root.val
         else:
             return False
+
+
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, root):
+        longest_unival = [0]
+        if root:
+            self.unival_height_02(root, longest_unival)
+        
+        return longest_unival[0]
+
+
+    def unival_height_02(self, root, longest_unival):
+        if not root:
+            return -1, None
+        elif not root.left and not root.right:
+            return 0, root.val
+        else:
+            l_height, l_val = self.unival_height_02(root.left, longest_unival)
+            r_height, r_val = self.unival_height_02(root.right, longest_unival)
+
+            if root.val == l_val and root.val == r_val:
+                longest_unival[0] = max(longest_unival[0], l_height + r_height + 2)
+                curr_unival_height = max(l_height, r_height) + 1
+            elif root.val == l_val:
+                longest_unival[0] = max(longest_unival[0], l_height + 1)
+                curr_unival_height = l_height + 1
+            elif root.val == r_val:
+                longest_unival[0] = max(longest_unival[0], r_height + 1)
+                curr_unival_height = r_height + 1
+            else:
+                curr_unival_height = 0
+
+            return curr_unival_height, root.val
+
+
 
 
 # Test
