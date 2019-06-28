@@ -11,12 +11,27 @@ Approach 1:
         
 Runtime: O(m*n^2), for m words of length O(n)
 Space Complexity: O(n)
+
+
+Approach 2:
+    Process each word:
+        Get all odd characters.
+        Get all even characters.
+        Sort odd and even characters.
+        
+        Concatenate and save even + odd as a new word.
+
+        Add new word to set, to only count for distinct 
+        strings made from the special equivalent constraint.
+Runtime: O(m*n*logn)
+Space Complexity: O(m * n)
 '''
 from collections import Counter
 from typing import List
 class Solution:
     def numSpecialEquivGroups(self, A: List[str]) -> int:
-        return self.solution_01(A)
+        # return self.solution_01(A)
+        return self.solution_02(A)
 
 
     # ########################################
@@ -53,6 +68,30 @@ class Solution:
             return True
         else:
             return False
+
+
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, words):
+        groups = set()
+        for word in words:
+            evens, odds = self.get_parity(word)
+
+            evens = sorted(evens)
+            odds = sorted(odds)
+
+            word = "".join(evens) + "".join(odds)
+            groups.add(word)
+
+        return len(groups)
+
+    
+    def get_parity(self, word):
+        evens = [char for i,char in enumerate(word) if i % 2 == 0]
+        odds = [char for i,char in enumerate(word) if i % 2 != 0]
+
+        return evens, odds
 
 
 # Test
