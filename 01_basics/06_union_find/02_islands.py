@@ -13,6 +13,8 @@ from collections import deque
 
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid:
+            return 0
         ds = self.modified_bfs(grid)
         return self.count_distinct_islands(grid, ds)
 
@@ -157,9 +159,7 @@ if __name__ == '__main__':
             [1,1,0,1,0],
             [1,1,0,0,0],
             [0,0,0,0,0]]
-    print(s.numIslands(grid))
     t.run(s.numIslands(grid) == 1)
-    print()
     
 
     grid = [[1,1,0,0,0],
@@ -167,6 +167,8 @@ if __name__ == '__main__':
             [0,0,1,0,0],
             [0,0,0,1,1]]
 
-    print(s.numIslands(grid))
     t.run(s.numIslands(grid) == 3)
-    print()
+
+
+    grid = []
+    t.run(s.numIslands(grid) == 0)
