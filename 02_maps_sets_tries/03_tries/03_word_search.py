@@ -41,7 +41,7 @@ class Trie:
 
     def search(self, word: str) -> bool:
         """
-        Returns if the word is in the trie.
+        Returns True if the word is in the trie.
         """
         itr = self.root
         for char in word:
@@ -126,11 +126,7 @@ class Solution:
         Q.append((src, word[0], set([src])))        # Bug 1 solved: Make sure to add initial character
 
         while Q:
-            if word == "aaab" and src == (0, 0):
-                print(Q)
             u, current_word, visited = Q.popleft()
-            if word == "aaab" and src == (0, 0):
-                print(f'id visited = {id(visited)}')
             if word == current_word and trie.search(current_word):       # Bug 2 solved: Check current word, and only add neighbors.
             # Bug 3 solved: Check the actual word is found, and not current build word
                 return True
