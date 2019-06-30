@@ -37,6 +37,18 @@ class Trie:
         
         return itr.is_end_word
 
+
+    def starts_with(self, word):
+        itr = self.root
+        for char in word:
+            i = self.idx(char)
+            if not itr[i]:
+                return False
+            itr = itr[i]
+        
+        return True
+
+
     def idx(self, char):
         return ord(char) - ord('a')
 
@@ -74,3 +86,4 @@ if __name__ == "__main__":
     t.run(sorted(in_trie) == sorted(words_1))
     t.run(sorted(not_in_trie) == sorted(words_2))
 
+    
