@@ -12,6 +12,17 @@ class Node:
     def __setitem__(self, idx, child_node):
         self.alphabet[idx] = child_node
 
+    def hash_child(self, char):
+        i = self.idx(char)
+        return self.alphabet[i] is not None
+
+    def child(self, char):
+        i = self.idx(char)
+        return self.alphabet[i]
+
+    def idx(self, char):
+        return ord(char) - ord('a')
+
 
 class Trie:
     def __init__(self):
