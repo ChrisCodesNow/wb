@@ -12,7 +12,7 @@ class Node:
     def __setitem__(self, idx, child_node):
         self.alphabet[idx] = child_node
 
-    def hash_child(self, char):
+    def has_child(self, char):
         i = self.idx(char)
         return self.alphabet[i] is not None
 
