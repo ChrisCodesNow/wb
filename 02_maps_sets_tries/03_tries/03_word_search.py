@@ -50,22 +50,27 @@ class Solution:
         for coordinate in starting_coordinates:
             i,j = coordinate
             char = board[i][j]
-            self.dfs(board, coordinate, set(), trie, char, found_words)
+            self.dfs(board, coordinate, set(), trie.root.child(char), char, found_words)
 
         return found_words
 
 
-    def dfs(self, board, u, visited, trie, built_word, found_words):
-        if trie.search(built_word):
+    def dfs(self, board, u, visited, trie_node, built_word, found_words):
+        if not trie_node:
+            return
+
+        if trie_node.is_end_word:
             found_words.add(built_word)
 
         visited.add(u)
         for v in self.get_neighbors(board, u):
             if v not in visited:
                 i,j = v
-                adjacent_word = built_word + board[i][j]
-                if trie.starts_with(adjacent_word):
-                    self.dfs(board, v, visited, trie, adjacent_word, found_words)
+                adjacent_char = board[i][j]
+                if trie_node.has_child(adjacent_char):
+                    adjacent_word = built_word + adjacent_char
+                    adjacent_node = trie_node.child(adjacent_char)
+                    self.dfs(board, v, visited, adjacent_node, adjacent_word, found_words)
 
         # Backtrack on this path, after checking all options
         visited.remove(u)
@@ -97,11 +102,12 @@ class Test:
             print(f"Failed test {self.count}")
 
         
+from time import time
 if __name__ == '__main__':
     s = Solution()
     t = Test()
 
-
+    start = time()
     board = [
         ["o","a","a","n"],
         ["e","t","a","e"],
@@ -158,3 +164,6 @@ if __name__ == '__main__':
         "anda","anes","anesis","avener","avine","bena","bend","benda","besa","besan","bowl","daven","embow","inerm","irene","myst","nane","nanes","neem","reem","reest","renew","rine","riva","rive","riven","sand","sane","sang","seen","seer","send","sise","stob","stow","teil","vine","viner","vire","wadna","wave","wene","wots"
     ]
     t.run(sorted(actual_found) == sorted(found))
+
+    end = time()
+    print(f"It took {end-start} seconds")
