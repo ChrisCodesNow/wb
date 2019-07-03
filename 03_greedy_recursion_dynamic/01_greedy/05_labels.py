@@ -1,7 +1,19 @@
 '''
-Approach :
-Runtime: O()
-Space Complexity: O()
+Approach 1:
+    Get frequency of each character.
+    Find group sizes:
+        Iterate characters:
+            Add character to remaining:
+                Remove character from frequency.
+            Add 1 to group size.
+            Remove 1 from remaining.
+
+            No more remaining:
+                Save current group size.
+                Reset group size.
+
+Runtime: O(n)
+Space Complexity: O(n)
 '''
 from collections import Counter
 from typing import List
