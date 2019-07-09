@@ -55,11 +55,8 @@ class Solution:
             if self.are_equivalent(s[0], p[0]):
                 memo[s, p] = self.match(s[1:], p[1:], memo)
             else:
-                memo[s,p] = self.match(s, p[1:], memo)
-                # if any(c == "*" for c in p):
-                #     memo[s, p] = self.match(s, p[1:], memo)
-                # else:
-                #     pass
+                memo[s,p] = False
+                # memo[s,p] = self.match(s, p[1:], memo)
 
         return memo[s, p]
 
@@ -67,8 +64,8 @@ class Solution:
     def is_empty(self, s):
         if not s:
             return True
-        elif len(s) <= 2 and s[-1] == "*":
-            return True
+        elif len(s) >= 2 and s[1] == "*":
+            return self.is_empty(s[2:])
         else:
             return False
 
@@ -147,6 +144,18 @@ if __name__ == '__main__':
 
     s = "b"
     p = "aaa."
+    result = False
+    my_result = solution.isMatch(s, p)
+    test.run(result == my_result)
+
+    s = ""
+    p = "c*c*"
+    result = True
+    my_result = solution.isMatch(s, p)
+    test.run(result == my_result)
+
+    s = "a"
+    p = ".*..a*"
     result = False
     my_result = solution.isMatch(s, p)
     test.run(result == my_result)
