@@ -33,8 +33,51 @@ class Solution:
     # ########################################
     # Approach 1
     #
+    def solution_01(self, word_1, word_2):
+        m = len(word_1)
+        n = len(word_2)
 
+        grid = self.make_zero_board(m + 1, n + 1)
+        self.fill_last_row(grid, n)
+        self.fill_last_col(grid, m)
+        min_distance = self.compute_distance(grid, word_1, word_2)
         
+        return min_distance
+
+
+    def make_zero_board(self, rows, cols):
+        return [[0 for _ in range(cols)] for __ in range(rows)]
+
+    
+    def fill_last_row(self, grid, row_val):
+        for j in range(len(grid[-1])):
+            grid[-1][j] = row_val
+            row_val -= 1
+
+    
+    def fill_last_col(self, grid, col_val):
+        for i in range(len(grid)):
+            grid[i][-1] = col_val
+            col_val -= 1
+
+
+    def compute_distance(self, grid, word_1, word_2):
+        rows = len(word_1) - 1
+        cols = len(word_2) - 1
+        
+        for i in range(rows, -1, -1):
+            for j in range(cols, -1, -1):
+                insert = grid[i][j + 1]
+                delete = grid[i + 1][j]
+                replace = grid[i + 1][j + 1]
+
+                if word_1[i] == word_2[j]:
+                    grid[i][j] = replace
+                else:
+                    grid[i][j] = min(insert, delete, replace) + 1
+
+
+        return grid[0][0]
 
 
 # Test
@@ -51,3 +94,16 @@ class Test:
 if __name__ == '__main__':
     solution = Solution()
     test = Test()
+
+    word1 = "horse"
+    word2 = "ros"
+    result = 3
+    my_result = solution.minDistance(word1, word2)
+    test.run(my_result == result)
+    
+
+    word1 = "intention"
+    word2 = "execution"
+    result = 5
+    my_result = solution.minDistance(word1, word2)
+    test.run(my_result == result)
