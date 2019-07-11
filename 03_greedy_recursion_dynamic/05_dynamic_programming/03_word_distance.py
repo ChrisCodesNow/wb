@@ -23,11 +23,38 @@ Approach 1:
 
 Runtime: O(m * n)
 Space Complexity: O(m * n)
+
+
+Approach 1: Similar to approach 1, but only use 2 arrays instead of m * n grid
+    n = size of word 2
+    top = Array of size n + 1 with values from [n to 0]
+    bottom = Array of size n + 1 with values from [n to 0]
+
+    Compute edit distance:
+        Iterate rows [m - 1, 0]:
+            Last top array val += Last bottom array val + 1
+            Iterate cols [n - 1, 0]:
+                insert = top[j + 1]
+                delete = bottom[j]
+                replace = bottom[j + 1]
+
+                word1[i] = word2[j]:
+                    top[j] = replace
+                Otherwise:
+                    top[j] = min(insert, delete, replace) + 1
+
+            bottom array = copy of top array
+
+    Min distance = top[0]
+
+Runtime: O(m * n)
+Space Complexity: O(n)
 '''
 from typing import List
 class Solution:
     def minDistance(self, word1: str, word2: str) -> int:
-        return self.solution_01(word1, word2)
+        # return self.solution_01(word1, word2)
+        return self.solution_02(word1, word2)
 
 
     # ########################################
@@ -78,6 +105,42 @@ class Solution:
 
 
         return grid[0][0]
+
+
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, word_1, word_2):
+        n = len(word_2)
+        top = self.n_to_zero_array(n)
+        bottom = self.n_to_zero_array(n)
+
+        return self.compute_dist(word_1, word_2, top, bottom)
+
+
+    def n_to_zero_array(self, n):
+        return list(range(n, -1, -1))
+
+
+    def compute_dist(self, word_1, word_2, top, bottom):
+        m = len(word_1)
+        n = len(word_2)
+
+        for i in range(m - 1, -1, -1):
+            top[-1] += 1
+            for j in range(n - 1, -1, -1):
+                insert = top[j + 1]
+                delete = bottom[j]
+                replace = bottom[j + 1]
+
+                if word_1[i] == word_2[j]:
+                    top[j] = replace
+                else:
+                    top[j] = min(insert, replace, delete) + 1
+
+            bottom = top[:]
+
+        return top[0]
 
 
 # Test
