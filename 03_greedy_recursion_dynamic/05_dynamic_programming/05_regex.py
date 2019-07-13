@@ -32,11 +32,50 @@ Approach 1: Bottom up Approach
 
 Runtime: O(mn)
 Space Complexity: O(mn)
+
+
+Approach 2: Bottom up Approach
+Similar to approach 1, but use 2 arrays of size O(n) instead of grid of size O(m * n)
+
+    m = size of string s
+    n = size of string p
+    top = False array of size n + 1
+    bottom = False array of size n + 1
+
+    Set end of s and p:
+        Since s and p are both empy, bottom[-1] = True
+
+    Set bottom array to (s empty, is P empty?):
+        Iterate bottom array [n - 1 to 0]:
+            Is next char a star and bottom[j + 2] = False
+                bottom[j] = True
+            Otherwise:
+                bottom[j] = False
+
+    Compute regex match:
+    Iterate chars of s [m -1 to 0]:
+        Iterate chars of p [n - 1 to 0]:
+            p[j] has next wild char:
+                s[i] equivalent to p[j]:
+                    top[j] = zero or many tries, that is top[j + 2] or bottom[j]
+                Otherwise:
+                    top[j] = zero tries, that is top[j + 2]
+            Otherwise:
+                s[i] equivalent to p[j]:
+                    top[j] = next match, that is bottom[j + 1]
+                Otherwise:
+                    top[j] = False
+        bottom array = copy of top array
+    
+
+Runtime: O(mn)
+Space Complexity: O(m)
 '''
 from typing import List
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        return self.solution_01(s, p)
+        # return self.solution_01(s, p)
+        return self.solution_02(s, p)
 
 
     # ########################################
@@ -96,6 +135,51 @@ class Solution:
     def are_equivalent(self, s_char, p_char):
         return s_char == p_char or p_char == '.'
     
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, s, p):
+        m = len(s)
+        n = len(p)
+
+        top = self.false_array(n + 1)
+        bottom = self.false_array(n + 1)
+
+        self.set_end_s_p_02(bottom)
+        self.set_bottom_row(bottom, p, n)
+        return self.compute_match_02(top, bottom, s, p, m, n)
+
+
+    def false_array(self, num_elements):
+        return [False for _ in range(num_elements)]
+
+
+    def set_end_s_p_02(self, bottom):
+        bottom[-1] = True
+
+
+    def set_bottom_row(self, bottom, p, n):
+        for j in range(n - 1, -1, -1):
+            bottom[j] = self.has_next_star(p, j) and bottom[j + 2] == True
+    
+    def compute_match_02(self, top, bottom, s, p, m ,n):
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                if self.has_next_star(p, j):
+                    if self.are_equivalent(s[i], p[j]):
+                        top[j] = top[j + 2] or bottom[j]
+                    else:
+                        top[j] = top[j + 2]
+                else:
+                    if self.are_equivalent(s[i], p[j]):
+                        top[j] = bottom[j + 1]
+                    else:
+                        top[j] = False
+            bottom = top[:]
+        
+        return top[0]
+
+
 
 # Test
 class Test:
