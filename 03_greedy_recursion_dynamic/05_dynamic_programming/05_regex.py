@@ -147,7 +147,11 @@ class Solution:
 
         self.set_end_s_p_02(bottom)
         self.set_bottom_row(bottom, p, n)
-        return self.compute_match_02(top, bottom, s, p, m, n)
+
+        if not s:
+            return bottom[0]
+        else:
+            return self.compute_match_02(top, bottom, s, p, m, n)
 
 
     def false_array(self, num_elements):
