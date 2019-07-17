@@ -26,6 +26,14 @@ Approach 2:
         Front num = new_front, that is nums[0] = new_front
 Runtime: O(kn)
 Space Complexity: O(k)
+
+
+Approach 3: Similar to approach 2, but use python3 array built in methods
+    Iterate k times:
+        Move current last num to front of nums list
+
+Runtime: O(kn)
+Space Complexity: O(k)
 '''
 from typing import List
 from collections import deque
@@ -35,7 +43,8 @@ class Solution:
         Do not return anything, modify nums in-place instead.
         """
         # self.solution_01(nums, k)
-        self.solution_02(nums, k)
+        # self.solution_02(nums, k)
+        self.solution_03(nums, k)
 
     # ########################################
     # Approach 1
@@ -57,7 +66,7 @@ class Solution:
 
 
     # ########################################
-    # Approach 1
+    # Approach 2
     #
     def solution_02(self, nums, k):
         if not nums or k == 0:
@@ -77,6 +86,20 @@ class Solution:
             nums[i] = nums[i - 1]
         
         nums[0] = new_front
+
+
+    # ########################################
+    # Approach 3
+    #
+    def solution_03(self, nums, k):
+        if not nums or k == 0:
+            return
+        
+        n = len(nums)
+        k = k % n
+        for _ in range(k):
+            new_front = nums.pop()
+            nums.insert(0, new_front)
 
 
 # Test
