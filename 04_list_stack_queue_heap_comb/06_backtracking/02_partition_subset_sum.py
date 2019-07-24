@@ -1,5 +1,28 @@
 '''
-Approach :
+Approach 1:
+    target = num to add to
+    candidates = list of given nums
+    selected = list of chosen nums from candidate list
+    total = sum of current selected nums
+    start = index of where to start looking
+            (Avoids duplicate selects s.a.: [2, 2, 3], and [3, 2, 2], etc)
+    n = size of candidates list
+
+    comb_sum(candidates, target, selected, total, start):
+        Base:
+            total = target:
+                => save current selected
+        Iterate candidates on index i [start, n - 1]:
+            total + candidates[i] <= target:
+                Add candidates[i] to selected
+                Recursively comb sum at start = i + 1:
+                    Do any of the recursive subproblems get eq subset sum?:
+                        => True
+                Remove candidates[i] from selected
+
+            No eq subset sum found at curr subproblem:
+                => False
+                
 Runtime: O()
 Space Complexity: O()
 '''
