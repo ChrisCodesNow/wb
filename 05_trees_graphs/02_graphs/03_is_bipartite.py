@@ -9,14 +9,22 @@ Approach 1:
     
 
 Approach 2:
+    disconnected = use disjoint set to find all disconnected graphs
+
     V0 = set representing first group coloring vertex
     V2 = set representing second group coloring vertex
-
     g = adjacency list from input graph format
-    src = 0
-    color = 0
-    visited = set
-    compute modified bfs(g, src, visited, V0, V1, color)
+
+    Iterate through every disconnected graph:
+        src = parent of current disjoint graph
+        color = 0
+        visited = set
+        compute modified bfs(g, src, visited, V0, V1, color)
+        Can't compute?:
+            => False
+
+    Can color all disconnected graphs:
+        => True
 
     bfs(g, src, visited, V0, V1, color):
         color = 0?:
@@ -35,7 +43,9 @@ Approach 2:
             Validate src and v are in distinct sets V0 and V1
 
         Can color all =? True
-    
+
+
+ 
 Runtime: O(V + E)
 Space Complexity: O(V + E)
 '''
@@ -130,7 +140,7 @@ class Solution:
     # Approach 2
     #
     def solution_02(self, graph):
-        disconnected = self.disjoint_subgraphs(graph)
+        disconnected = self.disconnected_graphs(graph)
         V0 = set()
         V1 = set()
         g = self.adj_list(graph)
@@ -163,7 +173,7 @@ class Solution:
         return True
 
 
-    def disjoint_subgraphs(self, graph):
+    def disconnected_graphs(self, graph):
         ds = DisjointSet(len(graph))
 
         for u,neighbors in enumerate(graph):
