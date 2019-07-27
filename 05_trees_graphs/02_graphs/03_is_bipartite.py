@@ -1,11 +1,40 @@
 '''
-Approach:
+Approach 1:
     Modified BFS:
         Join all neighbors v of u among themselves
         Validate u and all its neighbors v are not connected (disjoint)
         Add unvisited nieghbors to Q ... BFS
 
     All valid => T
+    
+
+Approach 2:
+    V0 = set representing first group coloring vertex
+    V2 = set representing second group coloring vertex
+
+    g = adjacency list from input graph format
+    src = 0
+    color = 0
+    visited = set
+    compute modified bfs(g, src, visited, V0, V1, color)
+
+    bfs(g, src, visited, V0, V1, color):
+        color = 0?:
+            Add src to set V0
+        color = 1?:
+            Add src to set V1
+
+        Mark src as visited
+        next_color = (color + 1) mod 2
+        Iterate neighbors v of g[src]:
+            v has not been visited:
+                compute dfs with (src = v, color = next color)
+                Can't color appropriately?:
+                    => Not bipartite => False
+
+            Validate src and v are in distinct sets V0 and V1
+
+        Can color all =? True
     
 Runtime: O(V + E)
 Space Complexity: O(V + E)
@@ -46,6 +75,13 @@ class DisjointSet:
 
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
+        # return self.solution_01(graph)
+        return self.solution_02(graph)
+
+    # ########################################
+    # Approach 1
+    #
+    def solution_01(self, graph):
         g = self.adj_list(graph)
         src = self.get_src(g)
         visited = set([src])
@@ -63,16 +99,6 @@ class Solution:
                     visited.add(v)
 
         return True
-
-    
-    def adj_list(self, edges):
-        g = defaultdict(set)
-        for u,outgoing in enumerate(edges):
-            for v in outgoing:
-                g[u].add(v)
-                g[v].add(u)
-
-        return g
 
 
     def get_src(self, g):
@@ -97,6 +123,51 @@ class Solution:
                 return False
         
         return True
+
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, graph):
+        V0 = set()
+        V1 = set()
+        g = self.adj_list(graph)
+        src = 0
+        color = 0
+        visited = set()
+
+        return self.dfs(g, src, visited, V0, V1, color)
+
+
+    def dfs(self, g, src, visited, V0, V1, color):
+        if color == 0:
+            V0.add(src)
+        else:
+            V1.add(src)
+
+        visited.add(src)
+        next_color = (color + 1) % 2
+        for v in g[src]:
+            if v not in visited:
+                if not self.dfs(g, v, visited, V0, V1, next_color):
+                    return False
+            if (src in V0 and v in V0) or (src in V1 and v in V1):
+                return False
+
+        return True
+
+
+    # ########################################
+    # Mutual methods
+    #
+    def adj_list(self, edges):
+        g = defaultdict(set)
+        for u,outgoing in enumerate(edges):
+            for v in outgoing:
+                g[u].add(v)
+                g[v].add(u)
+
+        return g
+
 
 # Test
 class Test:
