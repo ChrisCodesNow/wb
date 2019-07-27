@@ -41,6 +41,7 @@ Space Complexity: O(V + E)
 '''
 from collections import defaultdict, deque
 from typing import List
+
 class DisjointSet:
     def __init__(self, n):
         self.parent = [i for i in range(n)]
@@ -69,9 +70,10 @@ class DisjointSet:
     def are_connected(self, a, b):
         return self.find(a) == self.find(b)
 
-    def distinct_sets(self):
-        return len(set(self.parent))
 
+    def flatten(self):
+        for i in range(len(self.parent)):
+            self.parent[i] = self.find(self.parent[i])
 
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
@@ -128,14 +130,19 @@ class Solution:
     # Approach 2
     #
     def solution_02(self, graph):
+        disconnected = self.disjoint_subgraphs(graph)
         V0 = set()
         V1 = set()
         g = self.adj_list(graph)
-        src = 0
-        color = 0
-        visited = set()
+        
+        for src in disconnected:
+            # pdb.set_trace()
+            color = 0
+            visited = set()
+            if not self.dfs(g, src, visited, V0, V1, color):
+                return False
 
-        return self.dfs(g, src, visited, V0, V1, color)
+        return True
 
 
     def dfs(self, g, src, visited, V0, V1, color):
@@ -154,6 +161,17 @@ class Solution:
                 return False
 
         return True
+
+
+    def disjoint_subgraphs(self, graph):
+        ds = DisjointSet(len(graph))
+
+        for u,neighbors in enumerate(graph):
+            for v in neighbors:
+                ds.join(u, v)
+
+        ds.flatten()
+        return set(ds.parent)
 
 
     # ########################################
