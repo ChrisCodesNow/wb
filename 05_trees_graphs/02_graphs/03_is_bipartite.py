@@ -45,7 +45,48 @@ Approach 2:
         Can color all =? True
 
 
- 
+Approach 3: Avoid using disjoint set by removing already used disconnected graphs
+
+    V0 = set representing first group coloring vertex
+    V2 = set representing second group coloring vertex
+    g = adjacency list from input graph format
+
+    Iterate until no more vertices in g:
+        src = get a src vertex from g
+        color = 0
+        visited = set
+        compute modified bfs(g, src, visited, V0, V1, color)
+        Can't compute?:
+            => False
+        remove already used disconnected(g, visited)
+
+    Can color all disconnected graphs:
+        => True
+
+    bfs(g, src, visited, V0, V1, color):
+        color = 0?:
+            Add src to set V0
+        color = 1?:
+            Add src to set V1
+
+        Mark src as visited
+        next_color = (color + 1) mod 2
+        Iterate neighbors v of g[src]:
+            v has not been visited:
+                compute dfs with (src = v, color = next color)
+                Can't color appropriately?:
+                    => Not bipartite => False
+
+            Validate src and v are in distinct sets V0 and V1
+
+        Can color all =? True
+
+    remove_disconnected(g, visited):
+        Iterated visited vertices:
+            remove current vertex from g
+
+
+
 Runtime: O(V + E)
 Space Complexity: O(V + E)
 '''
@@ -88,7 +129,8 @@ class DisjointSet:
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
         # return self.solution_01(graph)
-        return self.solution_02(graph)
+        # return self.solution_02(graph)
+        return self.solution_03(graph)
 
     # ########################################
     # Approach 1
@@ -111,14 +153,6 @@ class Solution:
                     visited.add(v)
 
         return True
-
-
-    def get_src(self, g):
-        for u in g:
-            if g[u]:
-                return u
-        
-        return 0
 
 
     def join_neighbors(self, g, u, ds):
@@ -146,13 +180,67 @@ class Solution:
         g = self.adj_list(graph)
         
         for src in disconnected:
-            # pdb.set_trace()
             color = 0
             visited = set()
             if not self.dfs(g, src, visited, V0, V1, color):
                 return False
 
         return True
+
+
+    def disconnected_graphs(self, graph):
+        ds = DisjointSet(len(graph))
+
+        for u,neighbors in enumerate(graph):
+            for v in neighbors:
+                ds.join(u, v)
+
+        ds.flatten()
+        return set(ds.parent)
+
+    
+    # ########################################
+    # Approach 3
+    #
+    def solution_03(self, graph):
+        V0 = set()
+        V1 = set()
+        g = self.adj_list(graph)
+
+        while g:
+            src = self.get_src(g)
+            color = 0
+            visited = set()
+            if not self.dfs(g, src, visited, V0, V1, color):
+                return False
+            self.remove_disconnected(g, visited)
+        
+        return True
+
+    
+    def remove_disconnected(self, g, visited):
+        for u in visited:
+            del g[u]
+
+    # ########################################
+    # Mutual methods
+    #
+    def adj_list(self, edges):
+        g = defaultdict(set)
+        for u,outgoing in enumerate(edges):
+            for v in outgoing:
+                g[u].add(v)
+                g[v].add(u)
+
+        return g
+
+
+    def get_src(self, g):
+        for u in g:
+            if g[u]:
+                return u
+        
+        return 0
 
 
     def dfs(self, g, src, visited, V0, V1, color):
@@ -171,30 +259,6 @@ class Solution:
                 return False
 
         return True
-
-
-    def disconnected_graphs(self, graph):
-        ds = DisjointSet(len(graph))
-
-        for u,neighbors in enumerate(graph):
-            for v in neighbors:
-                ds.join(u, v)
-
-        ds.flatten()
-        return set(ds.parent)
-
-
-    # ########################################
-    # Mutual methods
-    #
-    def adj_list(self, edges):
-        g = defaultdict(set)
-        for u,outgoing in enumerate(edges):
-            for v in outgoing:
-                g[u].add(v)
-                g[v].add(u)
-
-        return g
 
 
 # Test
