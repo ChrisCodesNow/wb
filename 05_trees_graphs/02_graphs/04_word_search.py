@@ -9,16 +9,49 @@ Approach 1:
 
     Else: False
 
-Runtime: O(m*n)
-Space Complexity: O(m*n)
+Approach 2: DFS with backtracking
+    seach(board, word):
+        coords = find all coordinates in board with char = word[0]
+        Iterate src coords:
+            visited = empty set
+            built_word = word[0]
+            target = word
+            DFS(board, src coord, visited, built_word, target)
+            Did DFS find word?:
+                => True
+        None of src coords found word:
+            => False
+
+    dfs(board, source, visited, built_word, target):
+        built_word = target?:
+            => True
+        Mark source as visited
+        Iterate neighbors v of source:
+            v not visited:
+                next_word = built_word + char @ board[v]
+                Rec dfs(source = v, built_word = next_word)
+                Did dfs find word?:
+                    => True
+
+        Remove source from visited
+        Word not found in this path:
+            => False
+
+Runtime: O()
+Space Complexity: O()
 '''
 from collections import deque
 from typing import List
 class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        # return self.solution_01(board, word)
+        return self.solution_02(board, word)
+        
+        
     # ########################################
     # Approach 1
     #
-    def exist(self, board: List[List[str]], word: str) -> bool:
+    def solution_01(self, board, word):
         locations = self.get_locations(board, word[0])
         for location in locations:
             if self.can_build_word(board, word, location):
@@ -33,8 +66,10 @@ class Solution:
         while Q:
             u, idx = Q.popleft()
             i,j = u
+            if word == "ABCESEEEFS":
+                print(f"u = {u}, idx = {idx}")
             if board[i][j] == word[idx]:
-                visited.add(u)
+                visited.add(u)          # Mark as visited once word in current location is used
                 if idx == len(word) - 1:
                     return True
                 else:
@@ -44,6 +79,38 @@ class Solution:
         return False
 
 
+    # ########################################
+    # Approach 2
+    #
+    def solution_02(self, board, word):
+        coords = self.get_locations(board, word[0])
+
+        for coord in coords:
+            visited = set()
+            if self.dfs(board, coord, visited, word[0], word):
+                return True
+
+        return False
+
+    
+    def dfs(self, board, coord, visited, built_word, target):
+        if built_word == target:
+            return True
+        visited.add(coord)
+        for v in self.get_neighbors(board, coord):
+            if v not in visited:
+                i,j = v
+                next_word = built_word + board[i][j]
+                if self.dfs(board, v, visited, next_word, target):
+                    return True
+
+        visited.remove(coord)
+        return False
+
+
+    # ########################################
+    # Mutual methods
+    #
     def get_locations(self, board, char):
         locations = []
         for i,row in enumerate(board):
@@ -111,4 +178,15 @@ if __name__ == '__main__':
         ["c","d"]
     ]
     word = "acdb"
+    t.run(s.exist(board, word) == True)
+
+
+    # BUG: This needs to be a backtracking algorithm!
+    # Study how this is done, then come back!
+    board = [
+        ["A","B","C","E"],
+        ["S","F","E","S"],
+        ["A","D","E","E"]
+    ]
+    word = "ABCESEEEFS"
     t.run(s.exist(board, word) == True)
