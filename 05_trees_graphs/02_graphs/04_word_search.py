@@ -9,6 +9,7 @@ Approach 1:
 
     Else: False
 
+
 Approach 2: DFS with backtracking
     seach(board, word):
         coords = find all coordinates in board with char = word[0]
@@ -37,15 +38,34 @@ Approach 2: DFS with backtracking
         Word not found in this path:
             => False
 
+
+Approach 03: DFS with backtracking and using Trie Node to build word
+            in O(1) Trie instead of O(w) with string contact
+
+    search(board, word):
+        coords = coordinates from board where board @ coord = word[0]
+        Insert word in Trie
+        Iterate coords:
+            perform DFS(src = coord, visited = empty set, 
+                        built word = Trie node of w[0])
+            DFS found solution?:
+                => True
+
+        No solution found?:
+            => False
+
+
 Runtime: O()
 Space Complexity: O()
 '''
 from collections import deque
 from typing import List
+from notes.trie import Trie
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         # return self.solution_01(board, word)
-        return self.solution_02(board, word)
+        # return self.solution_02(board, word)
+        return self.solution_03(board, word)
         
         
     # ########################################
@@ -106,6 +126,46 @@ class Solution:
 
         visited.remove(coord)
         return False
+
+
+    # ########################################
+    # Approach 3
+    #
+    def solution_03(self, board, word):
+        coords = self.get_locations(board, word[0])
+        trie_root = self.make_trie([word]).root
+        for coord in coords:
+            visited = set()
+            built_word = trie_root.child(word[0])
+            if self.DFS(coord, board, visited, built_word):
+                return True
+
+        return False
+
+
+    def DFS(self, src, board, visited, built_word):
+        if built_word.is_end_word:
+            return True
+
+        visited.add(src)
+        for v in self.get_neighbors(board, src):
+            if v not in visited:
+                i,j = v
+                char = board[i][j]
+                if built_word.child(char):
+                    if self.DFS(v, board, visited, built_word.child(char)):
+                        return True
+
+        visited.remove(src)
+        return False
+
+
+    def make_trie(self, words):
+        trie = Trie()
+        for word in words:
+            trie.insert(word)
+        return trie
+
 
 
     # ########################################
@@ -181,12 +241,15 @@ if __name__ == '__main__':
     t.run(s.exist(board, word) == True)
 
 
-    # BUG: This needs to be a backtracking algorithm!
-    # Study how this is done, then come back!
     board = [
         ["A","B","C","E"],
         ["S","F","E","S"],
         ["A","D","E","E"]
     ]
     word = "ABCESEEEFS"
+    t.run(s.exist(board, word) == True)
+
+
+    board = [["F","Y","C","E","N","R","D"],["K","L","N","F","I","N","U"],["A","A","A","R","A","H","R"],["N","D","K","L","P","N","E"],["A","L","A","N","S","A","P"],["O","O","G","O","T","P","N"],["H","P","O","L","A","N","O"]]
+    word = "FRANCE"
     t.run(s.exist(board, word) == True)
