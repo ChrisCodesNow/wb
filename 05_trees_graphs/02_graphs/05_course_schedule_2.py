@@ -37,18 +37,22 @@ Approach 2: Similar to approach 1, but use in_g to remove in degree and keep tra
 
         Get BFS result @ (src, g, in_g, numCourses)
 
-    BFS(src, g, in_g, numCourses):
+    BFS(src, g, in_g, num_courses):
         Q = Queue with all src elements
 
         Iterate Q:
             src - next in Q
             Add src to ordered result
+            Ordered result has all num_courses?:
+                => Found schedule, get courses order
+
             Iterate neighbors v of src in g:
                 Reduce in_g of v by 1
                 in_g[v] = 0?:
                     Add to Q
 
-        Get ordered result
+        Schedule is not possible with given prereqs:
+            => No order possible
     
         
 Runtime: O()
@@ -119,7 +123,7 @@ class Solution:
                 if in_g[v] == 0:
                     Q.append(v)
 
-        return order
+        return []
 
 
     # ########################################
@@ -172,5 +176,12 @@ if __name__ == '__main__':
     num_courses = 3
     prerequisites = [[0,1],[0,2],[1,2]]
     result = [2,1,0]
+    my_result = solution.findOrder(num_courses, prerequisites)
+    test.run(my_result == result)
+
+
+    num_courses = 3
+    prerequisites = [[1,0],[1,2],[0,1]]
+    result = []
     my_result = solution.findOrder(num_courses, prerequisites)
     test.run(my_result == result)
